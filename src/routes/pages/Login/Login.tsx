@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { LoginSchema, type LoginSchemaType } from "./LoginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../../utils/auth";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function Login() {
   });
 
   const onSubmit = () => {
+    login();
     navigate("/table");
   };
 
