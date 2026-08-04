@@ -14,6 +14,9 @@ export default function Login() {
     navigate("/table");
   };
 
+  console.log(1, form);
+  console.log(2, form.formState);
+
   return (
     <main>
       <h1>Login</h1>
@@ -25,6 +28,9 @@ export default function Login() {
           placeholder="Enter your username"
           {...form.register("username")}
         />
+        {form.formState.errors.username && (
+          <p>{form.formState.errors.username.message}</p>
+        )}
         <label htmlFor="password">Password:</label>
         <input
           type="password"
@@ -32,6 +38,9 @@ export default function Login() {
           placeholder="Enter your password"
           {...form.register("password")}
         />
+        {form.formState.errors.username && (
+          <p>{form.formState.errors.username.message}</p>
+        )}
         <button>Login</button>
       </form>
     </main>
