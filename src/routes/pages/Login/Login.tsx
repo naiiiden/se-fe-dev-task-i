@@ -14,9 +14,6 @@ export default function Login() {
     navigate("/table");
   };
 
-  console.log(1, form);
-  console.log(2, form.formState);
-
   return (
     <main>
       <h1>Login</h1>
@@ -38,10 +35,10 @@ export default function Login() {
           placeholder="Enter your password"
           {...form.register("password")}
         />
-        {form.formState.errors.username && (
-          <p>{form.formState.errors.username.message}</p>
+        {form.formState.errors.password && (
+          <p>{form.formState.errors.password.message}</p>
         )}
-        <button>Login</button>
+        <button disabled={!form.formState.isValid}>Login</button>
       </form>
     </main>
   );
