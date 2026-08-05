@@ -13,13 +13,19 @@ import { columns } from "./table-columns";
 import { usePeople } from "./fetchPeople";
 
 export default function Table() {
-  const { data, isLoading, page, setPage } = usePeople();
+  const { data, isLoading, error, page, setPage } = usePeople();
 
   console.log(1, page);
+  console.log(2, error);
 
   return (
     <FluentProvider theme={webLightTheme}>
-      {isLoading ? (
+      {error ? (
+        <>
+          <h2 className="text-xl font-bold mb-2">Failed to load data</h2>
+          <p>{error}</p>
+        </>
+      ) : isLoading ? (
         <Spinner label="Loading Star Wars data..." />
       ) : (
         <DataGrid
