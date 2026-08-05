@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { LoginSchema, type LoginSchemaType } from "./LoginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
-import { login } from "../../../utils/auth";
+import { Navigate, useNavigate } from "react-router-dom";
+import { isAuthenticated, login } from "../../../utils/auth";
 import { Input, Label, Button } from "@fluentui/react-components";
 
 export default function Login() {
@@ -16,6 +16,10 @@ export default function Login() {
     login();
     navigate("/table");
   };
+
+  if (isAuthenticated()) {
+    return <Navigate to="/table" replace />;
+  }
 
   return (
     <main className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
