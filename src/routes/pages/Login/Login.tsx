@@ -67,7 +67,7 @@ export default function Login() {
             <Button
               type="submit"
               appearance="primary"
-              disabled={!form.formState.isValid}
+              disabled={Object.keys(form.formState.errors).length > 0}
               className="w-full mt-2"
             >
               Login
