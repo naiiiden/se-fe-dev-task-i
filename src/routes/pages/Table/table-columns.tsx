@@ -2,14 +2,7 @@ import {
   createTableColumn,
   type TableColumnDefinition,
 } from "@fluentui/react-components";
-
-interface Person {
-  name: string;
-  mass: string;
-  height: string;
-  hair_color: string;
-  skin_color: string;
-}
+import type { Person } from "./types";
 
 export const columns: TableColumnDefinition<Person>[] = [
   createTableColumn({
