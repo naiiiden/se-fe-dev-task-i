@@ -59,9 +59,14 @@ export default function Table() {
               <div className="flex flex-col items-center justify-center my-auto text-red-600 text-center">
                 <h2 className="text-lg">Failed to load data</h2>
                 <p className="mb-4">{error}</p>
-                <Button appearance="outline" onClick={refetch}>
-                  Retry
-                </Button>
+                <div className="flex gap-4">
+                  <Button appearance="outline" onClick={refetch}>
+                    Retry
+                  </Button>
+                  <Button appearance="primary" onClick={() => setPage(1)}>
+                    Go to page 1
+                  </Button>
+                </div>
               </div>
             ) : isLoading ? (
               <Spinner size="medium" className="my-auto" />
