@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import type { Person } from "./types";
 
 interface APIResponse {
@@ -24,8 +24,13 @@ export function usePeople() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isOffline, setIsOffline] = useState(false);
+  const lastSuccessfulPage = useRef(0);
 
   useEffect(() => {
+    if (page === lastSuccessfulPage.current) {
+      return;
+    }
+
     async function load() {
       setIsLoading(true);
       setError(null);
@@ -34,6 +39,7 @@ export function usePeople() {
       try {
         const response = await fetchPeoplePage(page);
         setData(response);
+        lastSuccessfulPage.current = page;
         setIsLoading(false);
       } catch (err) {
         if (err instanceof TypeError) {
@@ -42,6 +48,7 @@ export function usePeople() {
           setError(err instanceof Error ? err.message : "Failed to load data.");
         }
         setIsLoading(false);
+        setPage(lastSuccessfulPage.current);
       }
     }
 
@@ -57,5 +64,5 @@ export function usePeople() {
     return () => window.removeEventListener("online", handleOnline);
   }, []);
 
-  return { data, isLoading, error, isOffline, page, setPage };
+  return { data, isLoading, error, isOffline, setIsOffline, page, setPage };
 }
