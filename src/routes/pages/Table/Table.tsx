@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Button,
 } from "@fluentui/react-components";
 import { columns } from "./table-columns";
 import { usePeople } from "./fetchPeople";
@@ -30,68 +31,78 @@ export default function Table() {
     setPage,
   } = usePeople();
 
-  console.log(1, page);
-  console.log(2, error);
-  console.log(3, isOfflineModalOpen);
-
   return (
     <FluentProvider theme={webLightTheme}>
-      {error ? (
-        <>
-          <h2 className="text-xl font-bold mb-2">Failed to load data</h2>
-          <p>{error}</p>
-        </>
-      ) : isLoading ? (
-        <Spinner label="Loading Star Wars data..." />
-      ) : (
-        <DataGrid
-          items={data?.results ?? []}
-          columns={columns}
-          getRowId={(item) => item.url}
-          focusMode="composite"
-        >
-          <DataGridHeader>
-            <DataGridRow>
-              {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-              )}
-            </DataGridRow>
-          </DataGridHeader>
-          <DataGridBody>
-            {({ item, rowId }) => (
-              <DataGridRow key={rowId}>
-                {({ renderCell }) => (
-                  <DataGridCell>{renderCell(item)}</DataGridCell>
-                )}
-              </DataGridRow>
-            )}
-          </DataGridBody>
-        </DataGrid>
-      )}
+      <main className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <div className="space-y-6 w-full max-w-5xl bg-white p-4">
+          <h1 className="text-2xl font-bold">Star Wars Characters</h1>
 
-      <button
-        disabled={isLoading || data?.previous === null}
-        onClick={() => setPage(page - 1)}
-        className={data?.previous === null ? "text-red-600" : ""}
-      >
-        Previous
-      </button>
-      <button
-        disabled={isLoading || data?.next === null}
-        onClick={() => setPage(page + 1)}
-        className={data?.next === null ? "text-red-600" : ""}
-      >
-        Next
-      </button>
+          {error ? (
+            <div className="flex flex-col items-center justify-center py-16 text-red-600 text-center">
+              <h2 className="text-xl mb-2">Failed to load data</h2>
+              <p>{error}</p>
+            </div>
+          ) : isLoading ? (
+            <Spinner size="large" />
+          ) : (
+            <div className="overflow-x-auto w-full">
+              <DataGrid
+                items={data?.results ?? []}
+                columns={columns}
+                getRowId={(item) => item.url}
+                focusMode="composite"
+                className="min-w-150 w-full"
+              >
+                <DataGridHeader>
+                  <DataGridRow>
+                    {({ renderHeaderCell }) => (
+                      <DataGridHeaderCell>
+                        {renderHeaderCell()}
+                      </DataGridHeaderCell>
+                    )}
+                  </DataGridRow>
+                </DataGridHeader>
+                <DataGridBody>
+                  {({ item, rowId }) => (
+                    <DataGridRow key={rowId}>
+                      {({ renderCell }) => (
+                        <DataGridCell>{renderCell(item)}</DataGridCell>
+                      )}
+                    </DataGridRow>
+                  )}
+                </DataGridBody>
+              </DataGrid>
+            </div>
+          )}
+
+          <div className="flex justify-between items-center">
+            <Button
+              disabled={isLoading || data?.previous === null}
+              onClick={() => setPage(page - 1)}
+              appearance="secondary"
+            >
+              Previous
+            </Button>
+            <span>Page {page}</span>
+            <Button
+              disabled={isLoading || data?.next === null}
+              onClick={() => setPage(page + 1)}
+              appearance="primary"
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      </main>
 
       <Dialog
         open={isOfflineModalOpen}
         onOpenChange={(_, dialogData) => setIsOfflineModalOpen(dialogData.open)}
       >
-        <DialogSurface>
+        <DialogSurface className="max-w-md! w-full">
           <DialogBody>
             <DialogTitle>Connection Lost</DialogTitle>
-            <DialogContent>
+            <DialogContent className="space-y-4">
               <img src={gif} alt="" />
               <p>
                 We can't reach the Star Wars API. Please check your internet
@@ -99,9 +110,12 @@ export default function Table() {
               </p>
             </DialogContent>
             <DialogActions>
-              <button onClick={() => setIsOfflineModalOpen(false)}>
+              <Button
+                appearance="secondary"
+                onClick={() => setIsOfflineModalOpen(false)}
+              >
                 Close
-              </button>
+              </Button>
             </DialogActions>
           </DialogBody>
         </DialogSurface>

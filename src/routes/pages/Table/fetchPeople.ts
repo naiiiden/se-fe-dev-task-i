@@ -43,7 +43,7 @@ function setCachedData(key: string, data: APIResponse) {
 }
 
 async function fetchPeoplePage(page: number): Promise<APIResponse> {
-  const res = await fetch(`https://swapi.py4e.com/api/people/?page=${page}`);
+  const res = await fetch(`https://swapi.py4e.com/api/peoples/?page=${page}`);
   if (!res.ok) {
     throw new Error(`SWAPI request failed (${res.status})`);
   }
