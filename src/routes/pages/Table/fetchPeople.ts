@@ -20,7 +20,7 @@ async function fetchPeoplePage(page: number): Promise<APIResponse> {
 
 export function usePeople() {
   const [page, setPage] = useState(1);
-  const [data, setData] = useState<Person[] | null>(null);
+  const [data, setData] = useState<APIResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,7 +30,7 @@ export function usePeople() {
       setError(null);
       try {
         const response = await fetchPeoplePage(page);
-        setData(response.results);
+        setData(response);
         setIsLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load data.");
