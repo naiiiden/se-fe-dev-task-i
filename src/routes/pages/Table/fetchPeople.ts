@@ -9,13 +9,14 @@ interface APIResponse {
   results: Person[];
 }
 
-function getCachedData(key: string, ttlMs: number) {
+function getCachedData(key: string) {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
 
     const payload = JSON.parse(raw);
-    const isExpired = Date.now() - payload.timestamp > ttlMs;
+    const TIME_TO_LIVE = 5 * 60 * 1000; // min * sec * ms;
+    const isExpired = Date.now() - payload.timestamp > TIME_TO_LIVE;
 
     if (isExpired) {
       localStorage.removeItem(key);
@@ -71,7 +72,7 @@ export function usePeople() {
   useEffect(() => {
     async function load() {
       const cacheKey = `se-fe-dev-task-i-page-${page}`;
-      const cachedData = getCachedData(cacheKey, 5 * 60 * 1000); // min * sec * ms
+      const cachedData = getCachedData(cacheKey);
 
       if (cachedData) {
         setData(cachedData);
