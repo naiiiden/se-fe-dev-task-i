@@ -32,6 +32,7 @@ export default function Table() {
     page,
     setPage,
     refetch,
+    safeReturnPage,
   } = usePeople();
 
   const handleLogout = () => {
@@ -63,8 +64,11 @@ export default function Table() {
                   <Button appearance="outline" onClick={refetch}>
                     Retry
                   </Button>
-                  <Button appearance="primary" onClick={() => setPage(1)}>
-                    Go to page 1
+                  <Button
+                    appearance="primary"
+                    onClick={() => setPage(safeReturnPage)}
+                  >
+                    Return to page {safeReturnPage}
                   </Button>
                 </div>
               </div>

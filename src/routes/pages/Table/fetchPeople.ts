@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Person } from "./types";
 import { ensureMinDelay } from "../../../utils/delay";
@@ -37,12 +37,11 @@ export function usePeople() {
   const [error, setError] = useState<string | null>(null);
   const [isOfflineModalOpen, setIsOfflineModalOpen] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [lastSuccessfulPage, setLastSuccessfulPage] = useState(0);
 
   const refetch = useCallback(() => {
     setRetryCount((prev) => prev + 1);
   }, []);
-
-  const lastSuccessfulPage = useRef(0);
 
   useEffect(() => {
     async function load() {
@@ -56,7 +55,7 @@ export function usePeople() {
 
         setIsLoading(false);
         setError(null);
-        lastSuccessfulPage.current = page;
+        setLastSuccessfulPage(page);
         return;
       }
 
@@ -70,15 +69,15 @@ export function usePeople() {
 
         await ensureMinDelay(startTime);
         setData(response);
-        lastSuccessfulPage.current = page;
+        setLastSuccessfulPage(page);
         setIsLoading(false);
       } catch (err) {
         await ensureMinDelay(startTime);
 
+        const rollbackPage = lastSuccessfulPage === 0 ? 1 : lastSuccessfulPage;
+
         if (err instanceof TypeError) {
           setIsOfflineModalOpen(true);
-          const rollbackPage =
-            lastSuccessfulPage.current === 0 ? 1 : lastSuccessfulPage.current;
           setPage(rollbackPage);
         } else {
           setError(err instanceof Error ? err.message : "Failed to load data.");
@@ -89,7 +88,7 @@ export function usePeople() {
     }
 
     load();
-  }, [page, setPage, retryCount]);
+  }, [page, setPage, retryCount, lastSuccessfulPage]);
 
   useEffect(() => {
     const handleOnline = () => {
@@ -100,6 +99,8 @@ export function usePeople() {
     return () => window.removeEventListener("online", handleOnline);
   }, []);
 
+  const safeReturnPage = lastSuccessfulPage === 0 ? 1 : lastSuccessfulPage;
+
   return {
     data,
     isLoading,
@@ -109,5 +110,6 @@ export function usePeople() {
     page,
     setPage,
     refetch,
+    safeReturnPage,
   };
 }
