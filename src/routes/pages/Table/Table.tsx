@@ -29,6 +29,7 @@ export default function Table() {
     error,
     page,
     setPage,
+    refetch,
   } = usePeople();
 
   return (
@@ -40,8 +41,11 @@ export default function Table() {
           <div className="overflow-x-auto w-full min-h-96 lg:min-h-120.5 flex flex-col">
             {error ? (
               <div className="flex flex-col items-center justify-center my-auto text-red-600 text-center">
-                <h2 className="text-lg mb-2">Failed to load data</h2>
-                <p>{error}</p>
+                <h2 className="text-lg">Failed to load data</h2>
+                <p className="mb-4">{error}</p>
+                <Button appearance="outline" onClick={refetch}>
+                  Retry
+                </Button>
               </div>
             ) : isLoading ? (
               <Spinner size="medium" className="my-auto" />

@@ -67,6 +67,12 @@ export function usePeople() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isOfflineModalOpen, setIsOfflineModalOpen] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const refetch = useCallback(() => {
+    setRetryCount((prev) => prev + 1);
+  }, []);
+
   const lastSuccessfulPage = useRef(0);
 
   useEffect(() => {
@@ -108,7 +114,7 @@ export function usePeople() {
     }
 
     load();
-  }, [page, setPage]);
+  }, [page, setPage, retryCount]);
 
   useEffect(() => {
     const handleOnline = () => {
@@ -127,5 +133,6 @@ export function usePeople() {
     setIsOfflineModalOpen,
     page,
     setPage,
+    refetch,
   };
 }
