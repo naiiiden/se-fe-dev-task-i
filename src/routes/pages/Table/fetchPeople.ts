@@ -23,16 +23,17 @@ export function usePeople() {
   const [data, setData] = useState<APIResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
     async function load() {
       setIsLoading(true);
       setError(null);
+      setIsOffline(false);
+
       try {
         const response = await fetchPeoplePage(page);
         setData(response);
-        setIsOffline(false);
         setIsLoading(false);
       } catch (err) {
         if (err instanceof TypeError) {
@@ -48,16 +49,12 @@ export function usePeople() {
   }, [page]);
 
   useEffect(() => {
-    const handleOffline = () => setIsOffline(true);
-    const handleOnline = () => setIsOffline(false);
-
-    window.addEventListener("offline", handleOffline);
-    window.addEventListener("online", handleOnline);
-
-    return () => {
-      window.removeEventListener("offline", handleOffline);
-      window.removeEventListener("online", handleOnline);
+    const handleOnline = () => {
+      setIsOffline(false);
     };
+
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
   }, []);
 
   return { data, isLoading, error, isOffline, page, setPage };
