@@ -1,11 +1,12 @@
-export function getCachedData(key: string) {
+const TIME_TO_LIVE_MS = 5 * 60 * 1000; // min * sec * ms;
+
+export function getCachedData(key: string, ttlMs: number = TIME_TO_LIVE_MS) {
   try {
     const raw = localStorage.getItem(key);
     if (!raw) return null;
 
     const payload = JSON.parse(raw);
-    const TIME_TO_LIVE = 5 * 60 * 1000; // min * sec * ms;
-    const isExpired = Date.now() - payload.timestamp > TIME_TO_LIVE;
+    const isExpired = Date.now() - payload.timestamp > ttlMs;
 
     if (isExpired) {
       localStorage.removeItem(key);
