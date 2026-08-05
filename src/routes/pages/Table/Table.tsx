@@ -97,7 +97,9 @@ export default function Table() {
 
           <div className="flex justify-between items-center">
             <Button
-              disabled={isLoading || data?.previous === null}
+              disabled={
+                isLoading || !!error || !data || data?.previous === null
+              }
               onClick={() => setPage(page - 1)}
               appearance="secondary"
             >
@@ -105,7 +107,7 @@ export default function Table() {
             </Button>
             <span>Page {page}</span>
             <Button
-              disabled={isLoading || data?.next === null}
+              disabled={isLoading || !!error || !data || data?.next === null}
               onClick={() => setPage(page + 1)}
               appearance="primary"
             >
