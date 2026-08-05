@@ -8,15 +8,21 @@ import {
   FluentProvider,
   webLightTheme,
   Spinner,
+  Dialog,
+  DialogSurface,
+  DialogBody,
+  DialogTitle,
+  DialogContent,
 } from "@fluentui/react-components";
 import { columns } from "./table-columns";
 import { usePeople } from "./fetchPeople";
 
 export default function Table() {
-  const { data, isLoading, error, page, setPage } = usePeople();
+  const { data, isLoading, isOffline, error, page, setPage } = usePeople();
 
   console.log(1, page);
   console.log(2, error);
+  console.log(3, isOffline);
 
   return (
     <FluentProvider theme={webLightTheme}>
@@ -67,6 +73,22 @@ export default function Table() {
       >
         Next
       </button>
+
+      <Dialog open={isOffline}>
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>Connection Lost</DialogTitle>
+            <DialogContent>
+              <div>
+                <p>
+                  We can't reach the Star Wars API. Please check your internet
+                  connection.
+                </p>
+              </div>
+            </DialogContent>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </FluentProvider>
   );
 }
