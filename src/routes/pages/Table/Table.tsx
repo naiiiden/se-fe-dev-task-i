@@ -13,16 +13,25 @@ import {
   DialogBody,
   DialogTitle,
   DialogContent,
+  DialogActions,
 } from "@fluentui/react-components";
 import { columns } from "./table-columns";
 import { usePeople } from "./fetchPeople";
 
 export default function Table() {
-  const { data, isLoading, isOffline, error, page, setPage } = usePeople();
+  const {
+    data,
+    isLoading,
+    isOfflineModalOpen,
+    setIsOfflineModalOpen,
+    error,
+    page,
+    setPage,
+  } = usePeople();
 
   console.log(1, page);
   console.log(2, error);
-  console.log(3, isOffline);
+  console.log(3, isOfflineModalOpen);
 
   return (
     <FluentProvider theme={webLightTheme}>
@@ -74,7 +83,10 @@ export default function Table() {
         Next
       </button>
 
-      <Dialog open={isOffline}>
+      <Dialog
+        open={isOfflineModalOpen}
+        onOpenChange={(_, dialogData) => setIsOfflineModalOpen(dialogData.open)}
+      >
         <DialogSurface>
           <DialogBody>
             <DialogTitle>Connection Lost</DialogTitle>
@@ -86,6 +98,11 @@ export default function Table() {
                 </p>
               </div>
             </DialogContent>
+            <DialogActions>
+              <button onClick={() => setIsOfflineModalOpen(false)}>
+                Close
+              </button>
+            </DialogActions>
           </DialogBody>
         </DialogSurface>
       </Dialog>

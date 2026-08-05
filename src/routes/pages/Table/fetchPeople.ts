@@ -35,7 +35,7 @@ export function usePeople() {
   const [data, setData] = useState<APIResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isOffline, setIsOffline] = useState(false);
+  const [isOfflineModalOpen, setIsOfflineModalOpen] = useState(false);
   const lastSuccessfulPage = useRef(0);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export function usePeople() {
     async function load() {
       setIsLoading(true);
       setError(null);
-      setIsOffline(false);
+      setIsOfflineModalOpen(false);
 
       try {
         const response = await fetchPeoplePage(page);
@@ -55,7 +55,7 @@ export function usePeople() {
         setIsLoading(false);
       } catch (err) {
         if (err instanceof TypeError) {
-          setIsOffline(true);
+          setIsOfflineModalOpen(true);
         } else {
           setError(err instanceof Error ? err.message : "Failed to load data.");
         }
@@ -71,12 +71,20 @@ export function usePeople() {
 
   useEffect(() => {
     const handleOnline = () => {
-      setIsOffline(false);
+      setIsOfflineModalOpen(false);
     };
 
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);
   }, []);
 
-  return { data, isLoading, error, isOffline, setIsOffline, page, setPage };
+  return {
+    data,
+    isLoading,
+    error,
+    isOfflineModalOpen,
+    setIsOfflineModalOpen,
+    page,
+    setPage,
+  };
 }
