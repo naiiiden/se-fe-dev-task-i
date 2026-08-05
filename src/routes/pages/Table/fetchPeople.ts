@@ -1,24 +1,13 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Person } from "./types";
+import { ensureMinDelay } from "../../../utils/delay";
 
 interface APIResponse {
   count: number;
   next: string | null;
   previous: string | null;
   results: Person[];
-}
-
-const MIN_LOADING_TIME_MS = 400;
-
-async function ensureMinDelay(
-  startTime: number,
-  minMs: number = MIN_LOADING_TIME_MS,
-) {
-  const elapsed = Date.now() - startTime;
-  if (elapsed < minMs) {
-    await new Promise((resolve) => setTimeout(resolve, minMs - elapsed));
-  }
 }
 
 function getCachedData(key: string) {
