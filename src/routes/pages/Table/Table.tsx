@@ -17,8 +17,8 @@ import {
 import { columns } from "./table-columns";
 import { usePeople } from "./fetchPeople";
 import gif from "../../../assets/giphy.gif?inline";
-import { isAuthenticated, logout } from "../../../utils/auth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { logout } from "../../../utils/auth";
+import { useNavigate } from "react-router-dom";
 
 export default function Table() {
   const navigate = useNavigate();
@@ -38,10 +38,6 @@ export default function Table() {
     logout();
     navigate("/", { replace: true });
   };
-
-  if (!isAuthenticated()) {
-    return <Navigate to="/" replace />;
-  }
 
   return (
     <>
