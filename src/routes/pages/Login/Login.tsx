@@ -3,6 +3,13 @@ import { LoginSchema, type LoginSchemaType } from "./LoginSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../../utils/auth";
+import {
+  FluentProvider,
+  webLightTheme,
+  Input,
+  Label,
+  Button,
+} from "@fluentui/react-components";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -17,31 +24,57 @@ export default function Login() {
   };
 
   return (
-    <main>
-      <h1>Login</h1>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          placeholder="Enter your username"
-          {...form.register("username")}
-        />
-        {form.formState.errors.username && (
-          <p>{form.formState.errors.username.message}</p>
-        )}
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Enter your password"
-          {...form.register("password")}
-        />
-        {form.formState.errors.password && (
-          <p>{form.formState.errors.password.message}</p>
-        )}
-        <button disabled={!form.formState.isValid}>Login</button>
-      </form>
-    </main>
+    <FluentProvider theme={webLightTheme}>
+      <main className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+        <div className="space-y-6 w-full max-w-md bg-white p-4">
+          <h1 className="text-2xl font-bold">Login</h1>
+
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="username" required>
+                Username
+              </Label>
+              <Input
+                type="text"
+                id="username"
+                placeholder="Enter your username"
+                {...form.register("username")}
+              />
+              {form.formState.errors.username && (
+                <p className="text-xs text-red-600">
+                  {form.formState.errors.username.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="password" required>
+                Password
+              </Label>
+              <Input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                {...form.register("password")}
+              />
+              {form.formState.errors.password && (
+                <p className="text-xs text-red-600">
+                  {form.formState.errors.password.message}
+                </p>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              appearance="primary"
+              disabled={!form.formState.isValid}
+              className="w-full mt-2"
+            >
+              Login
+            </Button>
+          </form>
+        </div>
+      </main>
+    </FluentProvider>
   );
 }
