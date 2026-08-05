@@ -92,13 +92,11 @@ export default function Table() {
           <DialogBody>
             <DialogTitle>Connection Lost</DialogTitle>
             <DialogContent>
-              <div>
-                <img src={gif} alt="" />
-                <p>
-                  We can't reach the Star Wars API. Please check your internet
-                  connection.
-                </p>
-              </div>
+              <img src={gif} alt="" />
+              <p>
+                We can't reach the Star Wars API. Please check your internet
+                connection.
+              </p>
             </DialogContent>
             <DialogActions>
               <button onClick={() => setIsOfflineModalOpen(false)}>
