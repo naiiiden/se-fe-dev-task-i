@@ -17,6 +17,7 @@ import {
 } from "@fluentui/react-components";
 import { columns } from "./table-columns";
 import { usePeople } from "./fetchPeople";
+import gif from "../../../assets/giphy.gif?inline";
 
 export default function Table() {
   const {
@@ -82,6 +83,8 @@ export default function Table() {
       >
         Next
       </button>
+
+      <img src={gif} alt="" />
 
       <Dialog
         open={isOfflineModalOpen}
