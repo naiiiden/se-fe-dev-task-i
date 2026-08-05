@@ -17,6 +17,7 @@ import {
 import { columns } from "./table-columns";
 import { usePeople } from "./fetchPeople";
 import gif from "../../../assets/giphy.gif?inline";
+import { logout } from "../../../utils/auth";
 
 export default function Table() {
   const {
@@ -32,6 +33,13 @@ export default function Table() {
 
   return (
     <>
+      <Button
+        onClick={logout}
+        className="sr-only focus:not-sr-only fixed! right-4 top-4"
+      >
+        Logout
+      </Button>
+
       <main className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
         <div className="space-y-6 w-full max-w-5xl bg-white p-4">
           <h1 className="text-2xl font-bold">Star Wars Characters</h1>
