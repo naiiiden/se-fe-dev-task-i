@@ -78,14 +78,12 @@ export function usePeople() {
 
         setIsLoading(false);
         setError(null);
-        setIsOfflineModalOpen(false);
         lastSuccessfulPage.current = page;
         return;
       }
 
       setIsLoading(true);
       setError(null);
-      setIsOfflineModalOpen(false);
 
       try {
         const response = await fetchPeoplePage(page);
