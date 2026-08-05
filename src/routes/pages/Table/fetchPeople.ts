@@ -9,7 +9,37 @@ interface APIResponse {
   results: Person[];
 }
 
-export const PAGE_SIZE = 10;
+function getCachedData(key: string, ttlMs: number) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+
+    const payload = JSON.parse(raw);
+    const isExpired = Date.now() - payload.timestamp > ttlMs;
+
+    if (isExpired) {
+      localStorage.removeItem(key);
+      return null;
+    }
+
+    return payload.data;
+  } catch (err) {
+    console.warn("Error reading from localStorage cache:", err);
+    return null;
+  }
+}
+
+function setCachedData(key: string, data: APIResponse) {
+  try {
+    const payload = {
+      timestamp: Date.now(),
+      data,
+    };
+    localStorage.setItem(key, JSON.stringify(payload));
+  } catch (err) {
+    console.warn("Error writing to localStorage cache:", err);
+  }
+}
 
 async function fetchPeoplePage(page: number): Promise<APIResponse> {
   const res = await fetch(`https://swapi.py4e.com/api/people/?page=${page}`);
@@ -39,17 +69,29 @@ export function usePeople() {
   const lastSuccessfulPage = useRef(0);
 
   useEffect(() => {
-    if (page === lastSuccessfulPage.current) {
-      return;
-    }
-
     async function load() {
+      const cacheKey = `se-fe-dev-task-i-page-${page}`;
+      const cachedData = getCachedData(cacheKey, 5 * 60 * 1000); // min * sec * ms
+
+      if (cachedData) {
+        setData(cachedData);
+
+        setIsLoading(false);
+        setError(null);
+        setIsOfflineModalOpen(false);
+        lastSuccessfulPage.current = page;
+        return;
+      }
+
       setIsLoading(true);
       setError(null);
       setIsOfflineModalOpen(false);
 
       try {
         const response = await fetchPeoplePage(page);
+
+        setCachedData(cacheKey, response);
+
         setData(response);
         lastSuccessfulPage.current = page;
         setIsLoading(false);
