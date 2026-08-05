@@ -2,45 +2,13 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Person } from "./types";
 import { ensureMinDelay } from "../../../utils/delay";
+import { getCachedData, setCachedData } from "../../../utils/cache";
 
 interface APIResponse {
   count: number;
   next: string | null;
   previous: string | null;
   results: Person[];
-}
-
-function getCachedData(key: string) {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return null;
-
-    const payload = JSON.parse(raw);
-    const TIME_TO_LIVE = 5 * 60 * 1000; // min * sec * ms;
-    const isExpired = Date.now() - payload.timestamp > TIME_TO_LIVE;
-
-    if (isExpired) {
-      localStorage.removeItem(key);
-      return null;
-    }
-
-    return payload.data;
-  } catch (err) {
-    console.warn("Error reading from localStorage cache:", err);
-    return null;
-  }
-}
-
-function setCachedData(key: string, data: APIResponse) {
-  try {
-    const payload = {
-      timestamp: Date.now(),
-      data,
-    };
-    localStorage.setItem(key, JSON.stringify(payload));
-  } catch (err) {
-    console.warn("Error writing to localStorage cache:", err);
-  }
 }
 
 async function fetchPeoplePage(page: number): Promise<APIResponse> {
