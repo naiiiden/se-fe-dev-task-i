@@ -45,6 +45,8 @@ export default function Table() {
 
   return (
     <>
+      <title>Star Wars Characters</title>
+
       <Button
         onClick={handleLogout}
         className="sr-only focus:not-sr-only fixed! right-4 top-4"
