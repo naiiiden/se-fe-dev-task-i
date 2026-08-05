@@ -46,14 +46,14 @@ export default function Table() {
       <button
         disabled={data?.previous === null}
         onClick={() => setPage(page - 1)}
+        className={data?.previous === null ? "text-red-600" : ""}
       >
         Previous
       </button>
-      {/* temp hardcoded 10 */}
       <button
         disabled={data?.next === null}
         onClick={() => setPage(page + 1)}
-        className={data?.next ? "tex-red-600" : ""}
+        className={data?.next === null ? "text-red-600" : ""}
       >
         Next
       </button>
