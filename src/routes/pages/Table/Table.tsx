@@ -17,9 +17,12 @@ import {
 import { columns } from "./table-columns";
 import { usePeople } from "./fetchPeople";
 import gif from "../../../assets/giphy.gif?inline";
-import { logout } from "../../../utils/auth";
+import { isAuthenticated, logout } from "../../../utils/auth";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Table() {
+  const navigate = useNavigate();
+
   const {
     data,
     isLoading,
@@ -31,10 +34,19 @@ export default function Table() {
     refetch,
   } = usePeople();
 
+  const handleLogout = () => {
+    logout();
+    navigate("/", { replace: true });
+  };
+
+  if (!isAuthenticated()) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
     <>
       <Button
-        onClick={logout}
+        onClick={handleLogout}
         className="sr-only focus:not-sr-only fixed! right-4 top-4"
       >
         Logout
