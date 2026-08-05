@@ -1,4 +1,5 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
+import { useSearchParams } from "react-router-dom";
 import type { Person } from "./types";
 
 interface APIResponse {
@@ -19,7 +20,18 @@ async function fetchPeoplePage(page: number): Promise<APIResponse> {
 }
 
 export function usePeople() {
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
+  const page = isNaN(pageFromUrl) || pageFromUrl < 1 ? 1 : pageFromUrl;
+
+  const setPage = useCallback(
+    (newPage: number) => {
+      setSearchParams({ page: newPage.toString() });
+    },
+    [setSearchParams],
+  );
+
   const [data, setData] = useState<APIResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -48,12 +60,14 @@ export function usePeople() {
           setError(err instanceof Error ? err.message : "Failed to load data.");
         }
         setIsLoading(false);
-        setPage(lastSuccessfulPage.current);
+        const rollbackPage =
+          lastSuccessfulPage.current === 0 ? 1 : lastSuccessfulPage.current;
+        setPage(rollbackPage);
       }
     }
 
     load();
-  }, [page]);
+  }, [page, setPage]);
 
   useEffect(() => {
     const handleOnline = () => {
