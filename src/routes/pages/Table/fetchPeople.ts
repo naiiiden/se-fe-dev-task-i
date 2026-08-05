@@ -9,6 +9,18 @@ interface APIResponse {
   results: Person[];
 }
 
+const MIN_LOADING_TIME_MS = 400;
+
+async function ensureMinDelay(
+  startTime: number,
+  minMs: number = MIN_LOADING_TIME_MS,
+) {
+  const elapsed = Date.now() - startTime;
+  if (elapsed < minMs) {
+    await new Promise((resolve) => setTimeout(resolve, minMs - elapsed));
+  }
+}
+
 function getCachedData(key: string) {
   try {
     const raw = localStorage.getItem(key);
@@ -77,6 +89,8 @@ export function usePeople() {
 
   useEffect(() => {
     async function load() {
+      const startTime = Date.now();
+
       const cacheKey = `se-fe-dev-task-i-page-${page}`;
       const cachedData = getCachedData(cacheKey);
 
@@ -97,10 +111,13 @@ export function usePeople() {
 
         setCachedData(cacheKey, response);
 
+        await ensureMinDelay(startTime);
         setData(response);
         lastSuccessfulPage.current = page;
         setIsLoading(false);
       } catch (err) {
+        await ensureMinDelay(startTime);
+
         if (err instanceof TypeError) {
           setIsOfflineModalOpen(true);
         } else {
