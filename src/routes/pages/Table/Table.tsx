@@ -37,7 +37,7 @@ export default function Table() {
         <div className="space-y-6 w-full max-w-5xl bg-white p-4">
           <h1 className="text-2xl font-bold">Star Wars Characters</h1>
 
-          <div className="overflow-x-auto w-full min-h-96 flex flex-col">
+          <div className="overflow-x-auto w-full min-h-96 lg:min-h-120.5 flex flex-col">
             {error ? (
               <div className="flex flex-col items-center justify-center my-auto text-red-600 text-center">
                 <h2 className="text-lg mb-2">Failed to load data</h2>
