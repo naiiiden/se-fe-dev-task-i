@@ -92,6 +92,19 @@ export default function Table() {
             <DialogTitle>Connection Lost</DialogTitle>
             <DialogContent>
               <div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="#000000"
+                  width="40px"
+                  height="40px"
+                  viewBox="0 -1 26 26"
+                >
+                  <path
+                    fill-opacity=".3"
+                    d="M24.24 8l1.35-1.68C25.1 5.96 20.26 2 13 2S.9 5.96.42 6.32l12.57 15.66.01.02.01-.01L20 13.28V8h4.24z"
+                  />
+                  <path d="M22 22h2v-2h-2v2zm0-12v8h2v-8h-2z" />
+                </svg>
                 <p>
                   We can't reach the Star Wars API. Please check your internet
                   connection.
