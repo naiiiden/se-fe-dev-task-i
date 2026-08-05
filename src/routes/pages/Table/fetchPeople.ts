@@ -77,13 +77,14 @@ export function usePeople() {
 
         if (err instanceof TypeError) {
           setIsOfflineModalOpen(true);
+          const rollbackPage =
+            lastSuccessfulPage.current === 0 ? 1 : lastSuccessfulPage.current;
+          setPage(rollbackPage);
         } else {
           setError(err instanceof Error ? err.message : "Failed to load data.");
+          setData(null);
         }
         setIsLoading(false);
-        const rollbackPage =
-          lastSuccessfulPage.current === 0 ? 1 : lastSuccessfulPage.current;
-        setPage(rollbackPage);
       }
     }
 
