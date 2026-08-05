@@ -5,8 +5,6 @@ import {
   DataGridHeader,
   DataGridHeaderCell,
   DataGridRow,
-  FluentProvider,
-  webLightTheme,
   Spinner,
   Dialog,
   DialogSurface,
@@ -33,7 +31,7 @@ export default function Table() {
   } = usePeople();
 
   return (
-    <FluentProvider theme={webLightTheme}>
+    <>
       <main className="min-h-screen bg-gray-100 flex flex-col items-center justify-center">
         <div className="space-y-6 w-full max-w-5xl bg-white p-4">
           <h1 className="text-2xl font-bold">Star Wars Characters</h1>
@@ -124,6 +122,6 @@ export default function Table() {
           </DialogBody>
         </DialogSurface>
       </Dialog>
-    </FluentProvider>
+    </>
   );
 }
