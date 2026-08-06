@@ -3,31 +3,32 @@ import {
   type TableColumnDefinition,
 } from "@fluentui/react-components";
 import type { Person } from "./types";
+import { formatFieldValue } from "../../../utils/format";
 
 export const columns: TableColumnDefinition<Person>[] = [
   createTableColumn({
     columnId: "name",
     renderHeaderCell: () => "Name",
-    renderCell: (item) => item.name,
+    renderCell: (item) => formatFieldValue(item.name),
   }),
   createTableColumn({
     columnId: "mass",
     renderHeaderCell: () => "Mass",
-    renderCell: (item) => item.mass,
+    renderCell: (item) => formatFieldValue(item.mass),
   }),
   createTableColumn({
     columnId: "height",
     renderHeaderCell: () => "Height",
-    renderCell: (item) => item.height,
+    renderCell: (item) => formatFieldValue(item.height),
   }),
   createTableColumn({
     columnId: "hair_color",
     renderHeaderCell: () => "Hair Color",
-    renderCell: (item) => item.hair_color,
+    renderCell: (item) => formatFieldValue(item.hair_color),
   }),
   createTableColumn({
     columnId: "skin_color",
     renderHeaderCell: () => "Skin Color",
-    renderCell: (item) => item.skin_color,
+    renderCell: (item) => formatFieldValue(item.skin_color),
   }),
 ];
