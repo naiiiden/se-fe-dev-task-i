@@ -78,7 +78,7 @@ export default function Table() {
               <DataGrid
                 items={data?.results ?? []}
                 columns={columns}
-                getRowId={(item) => item.url}
+                getRowId={(item) => item.name}
                 focusMode="composite"
                 className="min-w-150 w-full"
               >
